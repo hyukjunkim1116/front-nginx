@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring API Test</title>
+</head>
+<body>
+    <h1>Spring API Test</h1>
+
+    <!-- DB Test (GET) -->
+    <h2>Test DB (GET)</h2>
+    <form id="db-get-form">
+        <label for="db-username-get">Enter Username:</label>
+        <input type="text" id="db-username-get" name="username" required>
+        <button type="submit">Get User</button>
+    </form>
+    <p id="db-get-result"></p>
+
+    <!-- DB Test (POST) -->
+    <h2>Test DB (POST)</h2>
+    <form id="db-post-form">
+        <label for="db-username-post">Enter Username:</label>
+        <input type="text" id="db-username-post" name="username" required>
+        <button type="submit">Create User</button>
+    </form>
+    <p id="db-post-result"></p>
+
+    <!-- S3 Image Upload Test (POST) -->
+    <h2>Upload Image to S3</h2>
+    <form id="s3-upload-form" enctype="multipart/form-data">
+        <label for="s3-username">Enter Username:</label>
+        <input type="text" id="s3-username" name="username" required><br><br>
+        <label for="s3-image">Choose Image:</label>
+        <input type="file" id="s3-image" name="image" accept="image/*" required><br><br>
+        <button type="submit">Upload Image</button>
+    </form>
+    <p id="s3-upload-result"></p>
+
+    <!-- S3 Image Load Test (GET) -->
+    <h2>Load Image URL from S3</h2>
+    <form id="s3-load-form">
+        <label for="s3-load-username">Enter Username:</label>
+        <input type="text" id="s3-load-username" name="username" required>
+        <button type="submit">Load Image URL</button>
+    </form>
+    <p id="s3-load-result"></p>
+
+    <script>
+        // DB Get (GET)
+        document.getElementById('db-get-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('db-username-get').value;
+
+            fetch(`/api/db/${username}`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('db-get-result').textContent = `Result: ${data}`;
+                });
+        });
+
+        // DB Post (POST)
+        document.getElementById('db-post-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('db-username-post').value;
+
+            fetch(`/api/db/${username}`, {
+                method: 'POST'
+            })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('db-post-result').textContent = `Created User: ${data}`;
+                });
+        });
+
+        // S3 Upload (POST)
+        document.getElementById('s3-upload-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData();
+            const username = document.getElementById('s3-username').value;
+            const image = document.getElementById('s3-image').files[0];
+            formData.append('image', image);
+
+            fetch(`/api/s3/${username}`, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('s3-upload-result').textContent = `Uploaded Image URL: ${data}`;
+                });
+        });
+
+        // S3 Load (GET)
+        document.getElementById('s3-load-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('s3-load-username').value;
+
+            fetch(`/api/s3/${username}`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('s3-load-result').textContent = `Image URL: ${data}`;
+                });
+        });
+    </script>
+</body>
+</html>
