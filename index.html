@@ -99,7 +99,8 @@
             fetch(`/api/s3/${username}`)
                 .then(response => response.text())
                 .then(data => {
-                    imgElement.src = imageUrl;
+                    const imgElement = document.getElementById('s3-load-result');
+                    imgElement.setAttribute('src', data);
                 });
         });
     </script>
