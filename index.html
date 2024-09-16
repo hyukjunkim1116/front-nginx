@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spring API Test</title>
 </head>
-<body>
+<i>
     <h1>Spring API Test</h1>
 
     <!-- DB Test (GET) -->
@@ -44,7 +44,7 @@
         <input type="text" id="s3-load-username" name="username" required>
         <button type="submit">Load Image URL</button>
     </form>
-    <p id="s3-load-result"></p>
+    <img id="s3-load-result"></img>
 
     <script>
         // DB Get (GET)
@@ -99,7 +99,7 @@
             fetch(`/api/s3/${username}`)
                 .then(response => response.text())
                 .then(data => {
-                    document.getElementById('s3-load-result').textContent = `Image URL: ${data}`;
+                    imgElement.src = imageUrl;
                 });
         });
     </script>
